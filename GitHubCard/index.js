@@ -2,15 +2,23 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-// axios
-//     .get("https://api.github.com/users/Perezented")
-//     .then(response => {
-//         console.log(response);
-resonpnse.data.avatar_url
-//     })
-//     .catch(error => {
-//         console.log("no data", error);
-//     });
+// resonpnse.data.avatar_url
+
+axios
+    .get("https://api.github.com/users/Perezented")
+    .then(response => {
+        console.log(response);
+        myImg.src = response.data.avatar_url;
+        name.textContent = response.data.name;
+        location.textContent = "Location: " + response.data.location;
+        profileLink.href = response.data.html_url;
+        followers.textContent = "Followers: " + response.data.followers;
+        following.textContent = "Following: " + response.data.following;
+        bio.textContent = response.data.bio;
+    })
+    .catch(error => {
+        console.log("no data", error);
+    });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -36,35 +44,36 @@ resonpnse.data.avatar_url
 const followersArray = [];
 
 //creating card with class
-const card = document.createElement('div');
-card.classList.add('card');
+const card = document.createElement("div");
+card.classList.add("card");
 //image with iamge source
-const myImg = document.createElement('img');
-myImg.src = #;
-const cardInfo = document.createElement('div');
-cardInfo.classList.add('card-info');
-const name = document.createElement('h3');
-name.classList.add('name');
-name.textContent = #;
+const myImg = document.createElement("img");
+const cardInfo = document.createElement("div");
+cardInfo.classList.add("card-info");
+const name = document.createElement("h3");
+name.classList.add("name");
 
-const userN = document.createElement('p');
-userN.classList.add('username');
-const location = document.createElement('p');
-location.textContent = 'Location: ' + #;
-const profile = document.createElement('p');
-const profileLink = document.createElement('a');
-const profileLink.href = #;
+const userN = document.createElement("p");
+userN.classList.add("username");
+const gpsLoc = document.createElement("p");
+const profile = document.createElement("p");
+const profileLink = document.createElement("a");
 
-const followers = document.createElement('p')
-followers.textContent = 'Followers: ' + #;
-const following = document.createElement('p')
-following.textContent = 'Following: ' + #;
-const bio = document.createElement('p');
-bio.textContent = #;
+const followers = document.createElement("p");
+const following = document.createElement("p");
+const bio = document.createElement("p");
 
-
-
-
+card.append(myImg, cardInfo);
+cardInfo.append(
+    name,
+    userN,
+    location,
+    profile,
+    profileLink,
+    followers,
+    following,
+    bio
+);
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
