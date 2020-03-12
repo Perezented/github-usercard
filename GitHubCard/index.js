@@ -2,15 +2,13 @@
            (replacing the palceholder with your Github name):
            https://api.github.com/users/<your name>
 */
-// resonpnse.data.avatar_url
 const attachHere = document.querySelector(".cards");
 
 axios
     .get("https://api.github.com/users/Perezented")
     .then(response => {
         console.log(response);
-        // cardMaker(response);
-        attachHere.append(cardMaker(response));
+        attachHere.append(cardMaker(response.data));
     })
     .catch(error => {
         console.log("ERRORZ MENG!", error);
@@ -18,24 +16,23 @@ axios
 axios
     .get("https://api.github.com/users/Perezented/followers")
     .then(response => {
-        console.log(response);
-        cardMaker(response);
+        const followersArray = [];
+
+        response.data.forEach(value => {
+            followersArray.push(value.login);
+            const theirName = value.login;
+            axios
+                .get(`https://api.github.com/users/${theirName}`)
+                .then(response2 => {
+                    console.log(response2);
+                    attachHere.append(cardMaker(response2.data));
+                })
+                .catch(error => {
+                    console.log("ERRORZ MENG!", error);
+                });
+        });
+        console.log(followersArray);
     });
-// axios
-//     .get("https://api.github.com/users/Perezented")
-//     .then(response => {
-//         console.log(response);
-//         myImg.src = response.data.avatar_url;
-//         name.textContent = response.data.name;
-//         location.textContent = "Location: " + response.data.location;
-//         profileLink.href = response.data.html_url;
-//         followers.textContent = "Followers: " + response.data.followers;
-//         following.textContent = "Following: " + response.data.following;
-//         bio.textContent = response.data.bio;
-//     })
-//     .catch(error => {
-//         console.log("no data", error);
-//     });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -57,7 +54,6 @@ axios
           Using that array, iterate over it, requesting data for each user, creating a new card for each
           user, and adding that card to the DOM.
 */
-const followersArray = [];
 // //creating card with class
 
 function cardMaker(obj) {
@@ -82,15 +78,15 @@ function cardMaker(obj) {
     profile.append("Profile: ", profileLink);
     cardInfo.append(name, userN, gpsLoc, profile, followers, following, bio);
 
-    myImg.src = obj.data.avatar_url;
-    name.textContent = obj.data.name;
-    userN.textContent = obj.data.login;
-    gpsLoc.textContent = "Location: " + obj.data.location;
+    myImg.src = obj.avatar_url;
+    name.textContent = obj.name;
+    userN.textContent = obj.login;
+    gpsLoc.textContent = "Location: " + obj.location;
     profileLink.textContent = "{address to users github page}";
-    profileLink.href = obj.data.html_url;
-    followers.textContent = "Followers: " + obj.data.followers;
-    following.textContent = "Following: " + obj.data.following;
-    bio.textContent = obj.data.bio;
+    profileLink.href = obj.html_url;
+    followers.textContent = "Followers: " + obj.followers;
+    following.textContent = "Following: " + obj.following;
+    bio.textContent = obj.bio;
 
     console.log(card);
     return card;
