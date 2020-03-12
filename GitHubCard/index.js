@@ -3,22 +3,39 @@
            https://api.github.com/users/<your name>
 */
 // resonpnse.data.avatar_url
+const attachHere = document.querySelector(".cards");
 
 axios
     .get("https://api.github.com/users/Perezented")
     .then(response => {
         console.log(response);
-        myImg.src = response.data.avatar_url;
-        name.textContent = response.data.name;
-        location.textContent = "Location: " + response.data.location;
-        profileLink.href = response.data.html_url;
-        followers.textContent = "Followers: " + response.data.followers;
-        following.textContent = "Following: " + response.data.following;
-        bio.textContent = response.data.bio;
+        // cardMaker(response);
+        attachHere.append(cardMaker(response));
     })
     .catch(error => {
-        console.log("no data", error);
+        console.log("ERRORZ MENG!", error);
     });
+axios
+    .get("https://api.github.com/users/Perezented/followers")
+    .then(response => {
+        console.log(response);
+        cardMaker(response);
+    });
+// axios
+//     .get("https://api.github.com/users/Perezented")
+//     .then(response => {
+//         console.log(response);
+//         myImg.src = response.data.avatar_url;
+//         name.textContent = response.data.name;
+//         location.textContent = "Location: " + response.data.location;
+//         profileLink.href = response.data.html_url;
+//         followers.textContent = "Followers: " + response.data.followers;
+//         following.textContent = "Following: " + response.data.following;
+//         bio.textContent = response.data.bio;
+//     })
+//     .catch(error => {
+//         console.log("no data", error);
+//     });
 
 /* Step 2: Inspect and study the data coming back, this is YOUR 
    github info! You will need to understand the structure of this 
@@ -40,40 +57,45 @@ axios
           Using that array, iterate over it, requesting data for each user, creating a new card for each
           user, and adding that card to the DOM.
 */
-
 const followersArray = [];
+// //creating card with class
 
-//creating card with class
-const card = document.createElement("div");
-card.classList.add("card");
-//image with iamge source
-const myImg = document.createElement("img");
-const cardInfo = document.createElement("div");
-cardInfo.classList.add("card-info");
-const name = document.createElement("h3");
-name.classList.add("name");
+function cardMaker(obj) {
+    const card = document.createElement("div"),
+        myImg = document.createElement("img"),
+        cardInfo = document.createElement("div"),
+        name = document.createElement("name"),
+        userN = document.createElement("p"),
+        gpsLoc = document.createElement("p"),
+        profile = document.createElement("p"),
+        profileLink = document.createElement("a"),
+        followers = document.createElement("p"),
+        following = document.createElement("p"),
+        bio = document.createElement("p");
 
-const userN = document.createElement("p");
-userN.classList.add("username");
-const gpsLoc = document.createElement("p");
-const profile = document.createElement("p");
-const profileLink = document.createElement("a");
+    card.classList.add("card");
+    cardInfo.classList.add("card-info");
+    name.classList.add("name");
+    userN.classList.add("username");
 
-const followers = document.createElement("p");
-const following = document.createElement("p");
-const bio = document.createElement("p");
+    card.append(myImg, cardInfo);
+    profile.append("Profile: ", profileLink);
+    cardInfo.append(name, userN, gpsLoc, profile, followers, following, bio);
 
-card.append(myImg, cardInfo);
-cardInfo.append(
-    name,
-    userN,
-    location,
-    profile,
-    profileLink,
-    followers,
-    following,
-    bio
-);
+    myImg.src = obj.data.avatar_url;
+    name.textContent = obj.data.name;
+    userN.textContent = obj.data.login;
+    gpsLoc.textContent = "Location: " + obj.data.location;
+    profileLink.textContent = "{address to users github page}";
+    profileLink.href = obj.data.html_url;
+    followers.textContent = "Followers: " + obj.data.followers;
+    following.textContent = "Following: " + obj.data.following;
+    bio.textContent = obj.data.bio;
+
+    console.log(card);
+    return card;
+}
+cardMaker;
 
 /* Step 3: Create a function that accepts a single object as its only argument,
           Using DOM methods and properties, create a component that will return the following DOM element:
