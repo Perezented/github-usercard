@@ -4,11 +4,29 @@
 */
 const attachHere = document.querySelector(".cards");
 const attachFollowingHere = document.querySelector(".cardsFollowing");
+const followingHeader = document.createElement("h2");
+attachFollowingHere.append(followingHeader);
+const followersHeader = document.createElement("h2");
+attachHere.append(followersHeader);
+
+document.querySelectorAll("div h2").forEach(value => {
+    console.log(value);
+    value.style.textAlign = "center";
+    value.style.fontSize = "3.5rem";
+    value.style.color = "white";
+    value.style.marginBottom = "1rem";
+});
+
 axios
     .get("https://api.github.com/users/Perezented")
     .then(response => {
         console.log(response);
-        attachHere.append(cardMaker(response.data));
+        const attachMyCardHere = document.querySelector(".myCard");
+        attachMyCardHere.append(cardMaker(response.data));
+        attachMyCardHere.style.width = "70%";
+        followersHeader.textContent = `Followers (${response.data.followers})`;
+
+        followingHeader.textContent = `Following (${response.data.following})`;
     })
     .catch(error => {
         console.log("ERRORZ MENG!", error);
