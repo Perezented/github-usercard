@@ -3,7 +3,7 @@
            https://api.github.com/users/<your name>
 */
 const attachHere = document.querySelector(".cards");
-
+const attachFollowingHere = document.querySelector(".cardsFollowing");
 axios
     .get("https://api.github.com/users/Perezented")
     .then(response => {
@@ -26,6 +26,26 @@ axios
                 .then(response2 => {
                     console.log(response2);
                     attachHere.append(cardMaker(response2.data));
+                })
+                .catch(error => {
+                    console.log("ERRORZ MENG!", error);
+                });
+        });
+        console.log(followersArray);
+    });
+axios
+    .get("https://api.github.com/users/Perezented/following")
+    .then(response => {
+        const followersArray = [];
+
+        response.data.forEach(value => {
+            followersArray.push(value.login);
+            const theirName = value.login;
+            axios
+                .get(`https://api.github.com/users/${theirName}`)
+                .then(response2 => {
+                    console.log(response2);
+                    attachFollowingHere.append(cardMaker(response2.data));
                 })
                 .catch(error => {
                     console.log("ERRORZ MENG!", error);
@@ -82,7 +102,7 @@ function cardMaker(obj) {
     name.textContent = obj.name;
     userN.textContent = obj.login;
     gpsLoc.textContent = "Location: " + obj.location;
-    profileLink.textContent = "{address to users github page}";
+    profileLink.textContent = obj.html_url;
     profileLink.href = obj.html_url;
     followers.textContent = "Followers: " + obj.followers;
     following.textContent = "Following: " + obj.following;
